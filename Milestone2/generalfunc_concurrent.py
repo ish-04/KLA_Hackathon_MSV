@@ -12,31 +12,39 @@ def time_function(functionInput, executionTime, condition, from_):
     time.sleep(int(executionTime))
 
 def data_load(filename, output, condition, from_):
-    # log(f'{from_} Executing DataLoad ({filename}, {output})')
-    with open(filename,mode="r") as file:
-        csv1=csv.reader(file)
+    log(f'{from_} Executing Dataload ({filename})')
+
+    #log(f'{from_} Executing DataLoad ({filename}, {output})')
+    # with open(filename,mode="r") as file:
+    #     csv1=csv.reader(file)
+    print(condition)
     if(condition):
-        condition = condition.replace('(', '[')
-        condition = condition.replace(')', ']')
+        condition = condition.replace('(', '[\'')
+        condition = condition.replace(')', '\']')
         condition = condition.replace('$', 'inMemory')
-        try:
-            if(exec(condition)):
-                # condition passed
-                log(f'{from_} Executing Dataload ({filename})')
-                # reading data from csv
+        
+        print(condition)
+        print("val", exec(condition))
+        if(eval(condition)):
+            # condition passed
+            # log(f'{from_} Executing Dataload ({filename})')
+            pass
                 
-            else: 
-                # condition failed
-                log(f'{from_} Skipped')    
-        except:
-            log(f'{from_} Skipped')  
-    else:
-        df = pd.read_csv(filename)
-        row_count, column_count = df.shape
-        if(output):
-            inMemory[f'{from_}.{output[0]}'] = df
-            inMemory[f'{from_}.{output[1]}'] = row_count
-        print(from_ ,output, df, inMemory)
+        else: 
+            # condition failed
+            log(f'{from_} Skipped')   
+            return 
+        # except:
+        #     log(f'{from_} Skipped')  
+        #     return
+    
+    df = pd.read_csv(filename)
+    row_count, column_count = df.shape
+
+    if(output):
+        inMemory[f'{from_}.{output[0]}'] = df
+        inMemory[f'{from_}.{output[1]}'] = row_count
+    # print(inMemory[f'{from_}.{output[1]}'])
 
 runnableFunctions = { "TimeFunction": time_function, "DataLoad" : data_load }
 
@@ -48,11 +56,13 @@ def recFunction(config, from_ = ''):
         Activities = config['Activities']
         activityKeys = list(Activities.keys())
         if(Execution == 'Sequential'):
+            print("seq")
             for key in activityKeys:
                 activity = Activities[key]
                 chainName = from_ + '.' + key
                 recFunction(activity, chainName)
         elif(Execution == 'Concurrent'):
+            print("conq")
             # If its concurrent creating an array of tasks for all activity
             tasks = []
             for key in activityKeys:
@@ -74,11 +84,10 @@ def recFunction(config, from_ = ''):
         outputs = None
         if 'Outputs' in list(config.keys()):
             outputs = config['Outputs']
-            print("out\n",outputs)
+
         condition = None
         if 'Condition' in list(config.keys()):
             condition = config['Condition']
-            
             
         if(functionName == 'TimeFunction'):
             functionInput, executionTime = inputs['FunctionInput'], inputs['ExecutionTime']
@@ -86,7 +95,6 @@ def recFunction(config, from_ = ''):
             
         elif(functionName == 'DataLoad'):
             filename = inputs['Filename']
-            
             runnableFunctions[functionName](filename, outputs, condition, from_)
 
     log(f'{from_} Exit')
