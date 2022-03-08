@@ -12,7 +12,7 @@ def time_function(functionInput, executionTime, condition, from_):
     time.sleep(int(executionTime))
 
 def data_load(filename, output, condition, from_):
-    log(f'{from_} Executing Dataload ({filename})')
+    
 
     #log(f'{from_} Executing DataLoad ({filename}, {output})')
     # with open(filename,mode="r") as file:
@@ -25,25 +25,28 @@ def data_load(filename, output, condition, from_):
         
         print(condition)
         print("val", exec(condition))
-        if(eval(condition)):
-            # condition passed
-            # log(f'{from_} Executing Dataload ({filename})')
-            pass
+        try:
+            if(eval(condition)):
+                # condition passed
+                # log(f'{from_} Executing Dataload ({filename})')
+                pass
                 
-        else: 
-            # condition failed
-            log(f'{from_} Skipped')   
-            return 
-        # except:
-        #     log(f'{from_} Skipped')  
-        #     return
-    
+            else: 
+                # condition failed
+                log(f'{from_} Skipped')   
+                return 
+        except:
+            log(f'{from_} Skipped')  
+            return
+    log(f'{from_} Executing Dataload ({filename})')
     df = pd.read_csv(filename)
     row_count, column_count = df.shape
 
     if(output):
-        inMemory[f'{from_}.{output[0]}'] = df
+        #inMemory[f'{from_}.{output[0]}'] = df
         inMemory[f'{from_}.{output[1]}'] = row_count
+        print(inMemory)
+        
     # print(inMemory[f'{from_}.{output[1]}'])
 
 runnableFunctions = { "TimeFunction": time_function, "DataLoad" : data_load }
