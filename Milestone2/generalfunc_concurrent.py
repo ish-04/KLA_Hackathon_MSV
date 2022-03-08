@@ -17,6 +17,14 @@ def data_load(filename, output, condition, from_):
     #log(f'{from_} Executing DataLoad ({filename}, {output})')
     # with open(filename,mode="r") as file:
     #     csv1=csv.reader(file)
+    df = pd.read_csv(filename)
+    row_count, column_count = df.shape
+
+    if(output):
+        #inMemory[f'{from_}.{output[0]}'] = df
+        inMemory[f'{from_}.{output[1]}'] = row_count
+        print(inMemory)
+        
     print(condition)
     if(condition):
         condition = condition.replace('(', '[\'')
@@ -39,13 +47,7 @@ def data_load(filename, output, condition, from_):
             log(f'{from_} Skipped')  
             return
     log(f'{from_} Executing Dataload ({filename})')
-    df = pd.read_csv(filename)
-    row_count, column_count = df.shape
-
-    if(output):
-        #inMemory[f'{from_}.{output[0]}'] = df
-        inMemory[f'{from_}.{output[1]}'] = row_count
-        print(inMemory)
+    
         
     # print(inMemory[f'{from_}.{output[1]}'])
 
