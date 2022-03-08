@@ -1,7 +1,7 @@
 from datetime import datetime
 import logging
 
-logging.basicConfig(filename="Milestone2A_Log.txt", format='%(message)s',filemode='w')
+logging.basicConfig(filename="Milestone2B_Log.txt", format='%(message)s',filemode='w')
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
