@@ -22,9 +22,9 @@ def data_load(filename, output, condition, from_):
 
     if(output):
         #inMemory[f'{from_}.{output[0]}'] = df
-        inMemory[f'{from_}.{output[1]}'] = row_count
+        inMemory[f'{from_}.{output[1]}'] = row_count+1
         print(inMemory)
-        
+
     print(condition)
     if(condition):
         condition = condition.replace('(', '[\'')
@@ -33,6 +33,7 @@ def data_load(filename, output, condition, from_):
         
         print(condition)
         print("val", exec(condition))
+        print("val", eval(condition))
         try:
             if(eval(condition)):
                 # condition passed
@@ -46,7 +47,7 @@ def data_load(filename, output, condition, from_):
         except:
             log(f'{from_} Skipped')  
             return
-    log(f'{from_} Executing Dataload ({filename})')
+    log(f'{from_} Executing DataLoad ({filename})')
     
         
     # print(inMemory[f'{from_}.{output[1]}'])
