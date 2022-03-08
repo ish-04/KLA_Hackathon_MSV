@@ -1,4 +1,5 @@
 import time
+from logger import log
 
 def time_function(sec):
     time.sleep(int(sec))
@@ -9,6 +10,7 @@ def data_load(filename, output):
 runnableFunctions = { "TimeFunction": time_function, "DataLoad" : data_load }
 
 def recFunction(config, from_ = ''):
+    log(f'{from_} Entry')
     Type = config['Type']
     if(Type == 'Flow'):
         Execution = config['Execution']
@@ -30,7 +32,7 @@ def recFunction(config, from_ = ''):
         elif(functionName == 'DataLoad'):
             filename = inputs['Filename']
             # runnableFunctions[Function](Filename)
-
+    log(f'{from_} Exit')
     
 
     
