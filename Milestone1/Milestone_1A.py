@@ -1,9 +1,9 @@
 import yaml
 import time
-import generalfn
+import generalfunc_concurrent
 
-with open("Milestone1A.yaml","r") as file:
+with open("Milestone1B.yaml","r") as file:
     data = yaml.safe_load(file)
 # print(data)
-generalfn.recFunction(data['M1A_Workflow'], 'M1A_Workflow')
+generalfunc_concurrent.recFunction(data['M1B_Workflow'], 'M1B_Workflow')
 
